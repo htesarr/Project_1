@@ -1,5 +1,5 @@
 ### prvni projekt ENGETO - textovy analyzer
-##zadany text
+## zadany text
 TEXTS = [
     '''Situated about 10 miles west of Kemmerer,
     Fossil Butte is a ruggedly impressive
@@ -27,20 +27,20 @@ TEXTS = [
     in modern oceans. Other fish such as paddlefish,
     garpike and stingray are also present.'''
 ]
-##seznam uzivatelu
+## seznam uzivatelu
 users = {
     "bob": "123",
     "ann": "pass123",
     "mike": "password123",
     "liz": "pass123",
 }
-#program
-pocet_textu = len(TEXTS)
-username = input("Username: ")
-password = input("Password: ")
-oddelovac = "*"*50
 
-if users.get(username) != None and password == users[username]: 
+pocet_textu = len(TEXTS)
+username = input("Username: ").strip()
+password = input("Password: ").strip()
+oddelovac = "*" * 50
+
+if username in users and password == users[username]:
     print(oddelovac)
     print(f"Welcome to the app, {username}.")
     print(f"We have {pocet_textu} texts to be analyzed")
@@ -49,44 +49,44 @@ else:
     print("unregistered user, terminating the program..")
     exit()
 
-choice = input(f"Enter a number btw. 1 and {pocet_textu} to select: ")   
-#kontrola na ciselne zadani
-if choice.isdigit() :
-    choice = int(choice)-1 #zohledneni indexovani od 0
+choice = input(f"Enter a number between. 1 and {pocet_textu} to select: ").strip()
+# kontrola na ciselne zadani
+if choice.isdigit():
+    choice = int(choice) - 1 # zohledneni indexovani od 0
 else:
     print("wrong input, terminating the program..")
     exit()
 #kontrola na rozsah zadani
-if choice < 0 or choice > pocet_textu-1: 
-        print("wrong input, terminating the program..")
-        exit()
+if choice < 0 or choice > pocet_textu - 1:
+    print("wrong input, terminating the program..")
+    exit()
 
-##analyza vybraneho textu
-#promenne
+## analyza vybraneho textu
+# promenne
 wordcount, title_word, upper_word, lower_word, number_word = 0, 0, 0, 0, 0
 number_sum = 0
 
-#rozdeleni textu na jednotliva slova a ocisteni o interpunkci
-text = [word.strip(".,!?;:") for word in TEXTS[choice].split()]
+# rozdeleni textu na jednotliva slova a ocisteni o interpunkci
+text = [word.strip(""".,!?;:"'[]{}()""") for word in TEXTS[choice].split()]
 
-text_max_len = len(max(text, key=len)) + 1 #nejdelsi slovo v textu +1 index
-word_len = [0] * text_max_len #list dle delky slov 
+text_max_len = len(max(text, key=len)) + 1 # nejdelsi slovo v textu +1 index
+word_len = [0] * text_max_len # list dle delky slov 
 
 for word in text:
     if word != "":
         wordcount += 1
-        word_len[len(word)] += 1 #dle delky slova prictu do listu
+        word_len[len(word)] += 1 # dle delky slova prictu do listu
         if word.istitle():
-            title_word += 1 
-        elif word.isupper():
+            title_word += 1
+        if word.isupper():
             upper_word += 1
-        elif word.islower():
+        if word.islower():
             lower_word += 1
-        elif word.isnumeric():
+        if word.isnumeric():
             number_word += 1
             number_sum += int(word)
 
-#vypis informaci
+# vypis informaci
 print(f"There are {wordcount} words in the selected text.")
 print(f"There are {title_word} titlecase words.")
 print(f"There are {upper_word} uppercase words.")
@@ -94,10 +94,10 @@ print(f"There are {lower_word} lowercase words.")
 print(f"There are {number_word} numeric strings.")
 print(f"The sum of all the numbers is {number_sum}.")
 print(oddelovac)
-print("LEN| ", format("OCCURENCIES".ljust(text_max_len + 10)),"|NR.")
+char_buffer = 10
+print("LEN| ", format("OCCURRENCES".ljust(text_max_len + char_buffer)),"|NR.")
 print(oddelovac)
-for len in range(1, text_max_len):
-    bar = "*" * word_len[len]
-    print(f"{len:>3}|{bar.ljust(text_max_len + 13)}|{word_len[len]}")
+for length in range(1, text_max_len):
+    bar = "*" * word_len[length]
+    print(f"{length:>3}|{bar.ljust(text_max_len + char_buffer + 3)}|{word_len[length]}")
 
-#konec
